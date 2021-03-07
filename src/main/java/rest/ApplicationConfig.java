@@ -22,9 +22,11 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(GenericExceptionMapper.class);
-        resources.add(WadlResource.class);
-        resources.add(RenameMeResource.class);
+        resources.add(errorhandling.GenericExceptionMapper.class);
+        resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
+        resources.add(rest.GenericResource.class);
+        resources.add(rest.PersonResource.class);
+        resources.add(rest.RenameMeResource.class);
     }
     
 }

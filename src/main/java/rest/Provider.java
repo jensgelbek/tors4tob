@@ -2,8 +2,10 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import entites.PersonRepository;
 import entities.renameme.RenameMeRepository;
 import facades.FacadeExample;
+import facades.PersonFacade;
 import javax.persistence.EntityManagerFactory;
 import utils.EMF_Creator;
 
@@ -22,9 +24,9 @@ public class Provider {
         EntityManagerFactory emf = EMF_Creator.createEntityManagerFactory();
 
         RenameMeRepository renameMeRepository = FacadeExample.getFacadeExample(emf);
-
+        PersonRepository personRepository=PersonFacade.getPersonFacade(emf);
         return new ParentRepository(
-            renameMeRepository
+            renameMeRepository,personRepository
         );
     }
 }
@@ -33,11 +35,17 @@ public class Provider {
 class ParentRepository {
 
     private final RenameMeRepository renameMeRepository;
+    private final PersonRepository personRepository;
 
-    ParentRepository(RenameMeRepository renameMeRepository) {
+    ParentRepository(RenameMeRepository renameMeRepository,PersonRepository personRepository) {
         this.renameMeRepository = renameMeRepository;
+        this.personRepository=personRepository;
     }
 
+    public PersonRepository getPersonRepository(){
+        return personRepository;
+    }
+    
     public RenameMeRepository getRenameMeRepo() {
         return renameMeRepository;
     }

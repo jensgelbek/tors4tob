@@ -6,10 +6,11 @@ import java.util.Objects;
 
 
 public class PersonDTO {
-    private Integer id;
+   
     private String firstname;
     private String lastName;
     private String phone; 
+    private Integer id;
 
     public PersonDTO( String firstname, String lastName, String phone) {
         this.firstname = firstname;

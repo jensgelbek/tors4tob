@@ -7,7 +7,10 @@ package facades;
 
 import dtos.PersonDTO;
 import dtos.PersonsDTO;
+import entites.Person;
 import entites.PersonRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 
 /**
  *
@@ -15,9 +18,47 @@ import entites.PersonRepository;
  */
 public class PersonFacade implements PersonRepository{
 
+    
+    private static PersonFacade instance;
+    private static EntityManagerFactory emf;
+    
+    //Private Constructor to ensure Singleton
+    private PersonFacade() {}
+    
+    
+    /**
+     * 
+     * @param _emf
+     * @return an instance of this repository class.
+     */
+    public static PersonFacade getPersonFacade(EntityManagerFactory _emf) {
+        if (instance == null) {
+            emf = _emf;
+            instance = new PersonFacade();
+        }
+        return instance;
+    }
+
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+
+    
+    
+    
     @Override
     public PersonDTO addPerson(String fName, String lName, String phone) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            EntityManager em = getEntityManager();
+            Person person=new Person(fName,lName,phone);
+            try{
+                em.getTransaction().begin();
+                em.persist(person);
+                em.getTransaction().commit();
+                return new PersonDTO(person);
+            }
+            finally{
+                em.close();
+            }
     }
 
     @Override
@@ -27,9 +68,11 @@ public class PersonFacade implements PersonRepository{
 
     @Override
     public PersonDTO getPerson(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         EntityManager em = getEntityManager();
+         return new PersonDTO(em.find(Person.class, id));
     }
 
+    
     @Override
     public PersonsDTO getAllPersons() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
